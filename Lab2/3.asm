@@ -1,0 +1,31 @@
+.model small
+.code
+	MOV AH, 1
+	INT 33
+	MOV AH,2
+	MOV DL, 224
+
+	
+	CMP AL, 65
+	JB E1
+	CMP AL, 90
+	JA E1
+	JMP DO
+	
+E1:
+
+	CMP AL, 97
+	JB DONT
+	CMP AL, 122
+	JA DONT
+
+	JMP DO
+
+DONT:
+	ADD DL, 1
+DO:
+	INT 33
+
+	MOV AH, 76
+	INT 33
+END
