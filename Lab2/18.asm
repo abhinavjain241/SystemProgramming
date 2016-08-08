@@ -1,13 +1,11 @@
 .model small
 .code
-i33:
+start:
 	INT 33
-	CMP AH, 2
-	JE exit
-	MOV DL, 'C'
-	MOV AH, 2
-	JMP i33
-exit:
 	MOV AH, 76
-	INT 33
-END
+	JMP start
+e1:
+	MOV AH, 2
+	MOV DL, 'C'
+	JMP start
+END e1
