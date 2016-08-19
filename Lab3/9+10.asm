@@ -1,0 +1,27 @@
+.model small
+
+.code
+
+	MOV AH, 1
+	INT 33
+	MOV CX, 10
+REDO:
+	CMP AL, 'A'
+	JNE PRINT
+	MOV DL, 10
+	SUB DL, CX
+	ADD DL, '0'
+	MOV AH, 2
+	INT 33
+	MOV AH, 76
+	INT 33
+PRINT:
+	MOV AH, 2
+	MOV DL, AL
+	INC DL
+	INT 33
+	MOV AH, 1
+	INT 33
+	LOOP REDO
+	
+END
