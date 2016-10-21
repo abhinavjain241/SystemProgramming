@@ -79,6 +79,7 @@ int main(){
 				ins[i-2] = 248+f(u);
 				ins[i-1] = atoi(v);
 				// TODO Word size implementation not done.
+				// TODO CMP reg, reg not implemented.
 		}
 		if (strcmp(t, "mov")==0) {
 			scanf("%s %s", u, v);
