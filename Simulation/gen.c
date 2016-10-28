@@ -40,7 +40,7 @@ int main(){
 	char t[10], u[10], v[10], sy[200];
 	int i=0;
 	int jlines[100], jlabel[100];
-	int ins[100];
+	int ins[100]={0};
 	int k=0;
 	
 	do {
@@ -69,17 +69,33 @@ int main(){
 			ins[i-2] = 192+f(u);
 			if (isint(v)) ins[i-1] = atoi(v);
 			else ins[i-1] = 192+f(v);
-
+			// TODO Word size remaining only generation part
 
 		}
 		if (strcmp(t, "cmp")==0) {
 			scanf("%s%s", u, v);
-			i+=3;
-				ins[i-3] = 128;
+
+			if (f(v)<200) {
+				i+=2;
+				ins[i-2] = 58+isword(v);
+				ins[i-1] = 192+8*f(u)+f(v);
+			}
+			else {
+				i+=3;
+				ins[i-3] = 128+isword(u);
 				ins[i-2] = 248+f(u);
+
+				if (isword(u)){
+					i++;
+					ins[i-2] = atoi(v)%256;
+					ins[i-1] = atoi(v)/256;
+				}
+				else
 				ins[i-1] = atoi(v);
-				// TODO Word size implementation not done.
-				// TODO CMP reg, reg not implemented.
+
+
+			}
+				
 		}
 		if (strcmp(t, "mov")==0) {
 			scanf("%s %s", u, v);
@@ -110,7 +126,7 @@ int main(){
 		ins[jlines[j]] = sy[jlabel[j]]-jlines[j]-1;
 	}
 	for(int j=0;j<i;j++){
-		printf("%d\n", ins[j]);
+		printf("%d ", ins[j]);
 	}
 
 
