@@ -9,11 +9,12 @@ int g(int i){
 int main(){
 	unsigned short regs[8];
 	unsigned char* r = (unsigned char*)regs;
-	int i,cy=1,x,y,z,p,q,a[10000], pc=0;
+	int i,cy=1,x,y,z,p,q,a[1000], pc=0;
 	int wr[4];
 	char t[10],c;
 	FILE *fp;
-
+	int ds[100];
+	int nds=0;
 	printf("Give filename: ");
 	scanf("%s", t);
 	fp=fopen(t, "r");
@@ -21,11 +22,24 @@ int main(){
 	for(i=0;i<=1000; i++){
 		fscanf(fp, "%d", &a[i]);
 	}
-
+	int flag=false;
 	while(1){
 
 		x = a[pc++];
-		if (x>175 && x<184) {y=a[pc++];z=x%8; r[g(z)]=y;}
+		if(x==999 && flag==false){
+			flag=true;
+			continue;
+		}
+		else if (flag==false){
+			while(x!=999){
+				ds[nds++]=x;	
+				x=a[pc++];
+			}
+			flag=true;
+			continue;
+		}
+//		printf("test");
+		if (x >175 && x<184) {y=a[pc++];z=x%8; r[g(z)]=y;}
 		if (x>=184 && x<192) {y=a[pc++];z=x%8;x=a[pc++]; regs[z]=y+256*x;}
 		if (x==138) {y=a[pc++]; p=y%64/8;q=y%8;r[g(p)]=r[g(q)];}
 		if (x==139) {y=a[pc++]; p=y%64/8;q=y%8;regs[p]=regs[q];}
@@ -49,6 +63,20 @@ int main(){
 			if (y>191 && y<200) r[g(p)]+=z;
 			if (y>247) if (q<z) cy=1; else cy=0;
 		}
+		if (x==99){
+			y=a[pc++];
+			z=a[pc++];
+			// not implemented for word size register
+			//printf("ss%dss", nds);
+			r[g(y)]=a[z+nds+1];
+		}
+		if (x==100){
+			y=a[pc++];
+			z=a[pc++];
+			// not implemented for word size register
+			//printf("ss%dss", z);
+			r[g(y)]=ds[regs[z/8]];
+		}
 		if (x==129) {
 			y=a[pc++]; z= a[pc++]; p=y%8;x=a[pc++]; q=regs[p];
 			if (y>191 && y<200) regs[p]+=z+256*x;
@@ -59,6 +87,10 @@ int main(){
 			if (cy){
 				pc = pc+y;
 			}
+		}
+		if (x==235) {
+			y=a[pc++];
+			pc = pc+y;
 		}
 
 	}
