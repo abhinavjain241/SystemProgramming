@@ -1,0 +1,5 @@
+.model small
+
+.code
+
+end
